@@ -1,26 +1,72 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  --background: #F5F1E9;
+  --foreground: #242522;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --marfim: #F5F1E9;
+  --marfim-soft: #FAF7F2;
+  --marfim-dark: #E8E2D5;
+  --grafite: #242522;
+  --grafite-light: #3D3F3A;
+  --grafite-muted: #6C6F65;
+  --couro: #87563B;
+  --couro-light: #A36B4D;
+  --couro-dark: #663F2A;
+  --oliva: #70775E;
+  --oliva-light: #8B9476;
+  --oliva-dark: #535944;
+  --areia: #C4A476;
+  --areia-light: #DEC9A9;
+  --areia-soft: #F1E7D8;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-manrope), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Editorial typography utilities */
+.font-editorial {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.font-editorial-italic {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-style: italic;
+}
+
+/* Subtle image hover zoom */
+.editorial-image-container {
+  overflow: hidden;
+  background-color: #F0ECE4;
+}
+
+.editorial-image-container img {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.editorial-image-container:hover img {
+  transform: scale(1.03);
+}
+
+/* Clean scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F5F1E9;
+}
+::-webkit-scrollbar-thumb {
+  background: #C4A476;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #87563B;
 }

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Administrativo — Keina Mark Studio</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>K</text></svg>">
+  <script src="js/auth.js"></script>
+  <script>
+    // GUARDIÃO DE ACESSO ADMINISTRATIVO IMEDIATO (RBAC)
+    (function() {
+      const user = KM_AUTH.getCurrentUser();
+      if (!user || user.role !== 'admin') {
+        // Redireciona imediatamente visitantes e clientes comuns
+        window.location.replace("index.html?access_denied=1");
+      }
+    })();
+  </script>
+</head>
+<body style="background-color: var(--color-marfim-light);">
+
+  <!-- Cabeçalho do Admin Protegido -->
+  <header class="admin-header">
+    <div class="admin-brand">
+      <a href="index.html" style="color: var(--color-marfim); text-decoration: none;">KEINA MARK STUDIO</a>
+      <span class="admin-badge">Painel de Gestão</span>
+    </div>
+    <div style="display: flex; gap: 16px; align-items: center;">
+      <!-- Identificação do Administrador Autenticado -->
+      <div id="adminUserBadge" style="font-size: 0.82rem; color: var(--color-areia-light); display: flex; align-items: center; gap: 8px;">
+        <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: var(--color-verde-oliva-light);"></span>
+        <span>Admin: <strong id="adminUserName">Keina Mark</strong></span>
+      </div>
+
+      <a href="index.html" class="btn btn-secondary btn-sm" style="border-color: rgba(255,255,255,0.3); color: var(--color-marfim);" target="_blank">
+        Ver Loja Virtual &nearr;
+      </a>
+      <button class="btn btn-primary btn-sm" onclick="KM_ADMIN.resetDefaultCatalog()" style="background-color: var(--color-couro); border-color: var(--color-couro);">
+        Restaurar Catálogo Oficial
+      </button>
+      <button class="btn btn-secondary btn-sm" onclick="KM_ADMIN.logout()" style="border-color: rgba(255,255,255,0.2); color: var(--color-marfim-dark);">
+        Sair
+      </button>
+    </div>
+  </header>
+
+  <main class="admin-container">
+
+    <!-- Métricas do Dashboard -->
+    <section class="metrics-grid">
+      <div class="metric-card">
+        <span class="metric-card-label">Total Produtos</span>
+        <span class="metric-card-value" id="metricTotal">0</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-card-label">Publicados</span>
+        <span class="metric-card-value" id="metricPublished" style="color: var(--color-verde-oliva-dark);">0</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-card-label">Rascunhos</span>
+        <span class="metric-card-value" id="metricDrafts" style="color: var(--color-couro);">0</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-card-label">Sob Consulta</span>
+        <span class="metric-card-value" id="metricInquiry">0</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-card-label">Volumosos</span>
+        <span class="metric-card-value" id="metricBulky">0</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-card-label">Clientes</span>
+        <span class="metric-card-value" id="metricCustomers">0</span>
+      </div>
+    </section>
+
+    <!-- Barra de Navegação entre Seções do Painel -->
+    <div style="display: flex; gap: 12px; margin-bottom: 24px; border-bottom: 1px solid var(--color-areia-border); padding-bottom: 12px;">
+      <button class="filter-pill active" id="tabBtnProducts" onclick="KM_ADMIN.switchTab('products')">Catálogo de Produtos</button>
+      <button class="filter-pill" id="tabBtnCategories" onclick="KM_ADMIN.switchTab('categories')">Categorias & Coleções</button>
+      <button class="filter-pill" id="tabBtnCustomers" onclick="KM_ADMIN.switchTab('customers')">Clientes & Endereços</button>
+      <button class="filter-pill" id="tabBtnSettings" onclick="KM_ADMIN.switchTab('settings')">Aparência & Configurações</button>
+    </div>
+
+    <!-- SEÇÃO 1: PRODUTOS -->
+    <section id="sectionProducts">
+      <!-- Toolbar de Produtos -->
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 20px;">
+        <div style="display: flex; gap: 12px; flex: 1; max-width: 600px;">
+          <input type="text" id="adminSearchInput" class="form-control" placeholder="Buscar por nome, SKU ou material..." oninput="KM_ADMIN.handleSearch(this.value)" style="flex: 1;">
+          <select id="adminCategoryFilter" class="form-control" onchange="KM_ADMIN.handleCategoryFilter(this.value)" style="width: 200px;">
+            <option value="all">Todas as Categorias</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" onclick="KM_ADMIN.openNewProductModal()">
+          + Novo Produto
+        </button>
+      </div>
+
+      <!-- Tabela de Produtos -->
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th style="width: 70px;">Imagem</th>
+              <th>Produto & SKU</th>
+              <th>Categoria</th>
+              <th>Preço</th>
+              <th>Estoque</th>
+              <th>Status</th>
+              <th style="text-align: right; width: 220px;">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="productsTableBody">
+            <!-- Linhas inseridas dinamicamente -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 2: CATEGORIAS & COLEÇÕES -->
+    <section id="sectionCategories" style="display: none;">
+      <div style="display: grid; grid-template-columns: 1fr; gap: 32px;" class="cat-col-grid">
+        <div style="background-color: var(--color-white); padding: 24px; border: 1px solid var(--color-areia-border); border-radius: var(--radius-sm);">
+          <h3 style="font-size: 1.8rem; margin-bottom: 16px;">Categorias Cadastradas</h3>
+          <div id="adminCategoriesList" style="display: flex; flex-direction: column; gap: 12px;"></div>
+        </div>
+        <div style="background-color: var(--color-white); padding: 24px; border: 1px solid var(--color-areia-border); border-radius: var(--radius-sm);">
+          <h3 style="font-size: 1.8rem; margin-bottom: 16px;">Coleção Ativa em Destaque</h3>
+          <div id="adminCollectionsList" style="display: flex; flex-direction: column; gap: 12px;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 3: CLIENTES -->
+    <section id="sectionCustomers" style="display: none;">
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>E-mail</th>
+              <th>Perfil</th>
+              <th>Data de Cadastro</th>
+              <th>Endereço Principal</th>
+            </tr>
+          </thead>
+          <tbody id="customersTableBody">
+            <!-- Preenchido via JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 4: CONFIGURAÇÕES E APARÊNCIA -->
+    <section id="sectionSettings" style="display: none;">
+      <div style="max-width: 800px; background-color: var(--color-white); padding: 32px; border: 1px solid var(--color-areia-border); border-radius: var(--radius-sm);">
+        <h3 style="font-size: 2rem; margin-bottom: 24px;">Configurações Editoriais da Loja</h3>
+        
+        <form id="settingsForm" onsubmit="KM_ADMIN.saveSettingsForm(event)">
+          <div class="form-group">
+            <label class="form-label" for="settingStoreName">Nome da Marca</label>
+            <input type="text" id="settingStoreName" class="form-control" value="Keina Mark Studio" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="settingContactEmail">E-mail de Contato</label>
+            <input type="email" id="settingContactEmail" class="form-control" value="contato@keinamark.com.br" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="settingInstagram">Perfil Instagram</label>
+            <input type="text" id="settingInstagram" class="form-control" value="@keinamarkstudio">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="settingOriginCep">CEP de Origem para Envio</label>
+            <input type="text" id="settingOriginCep" class="form-control" value="69000-000">
+            <small style="color: var(--color-grafite-muted);">Manaus / Amazonas — Base oficial de despacho</small>
+          </div>
+
+          <div class="form-group" style="margin-top: 24px;">
+            <label class="form-label" for="settingHeroTitle">Título do Hero (Página Inicial)</label>
+            <textarea id="settingHeroTitle" class="form-control" rows="2">Design com origem.
+Peças com identidade.</textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="settingHeroSubtitle">Subtítulo do Hero</label>
+            <textarea id="settingHeroSubtitle" class="form-control" rows="3">Uma curadoria de peças que une criatividade, expressão e design contemporâneo.</textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="settingEssenceText">Texto Institucional: A Essência</label>
+            <textarea id="settingEssenceText" class="form-control" rows="4">A Keina Mark Studio propõe um diálogo autoral entre o design contemporâneo e a alma brasileira...</textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="margin-top: 16px;">
+            Salvar Alterações
+          </button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: EDITOR DE PRODUTO (CRIAÇÃO E EDIÇÃO) -->
+  <div class="modal-backdrop" id="productModalBackdrop">
+    <div class="modal-dialog" style="max-width: 820px; padding: 32px;">
+      <button class="modal-close-btn" onclick="KM_ADMIN.closeModal()">&times;</button>
+      
+      <div style="margin-bottom: 24px;">
+        <span class="section-tag">Administração</span>
+        <h3 style="font-size: 2.2rem; margin-top: 4px;" id="modalTitle">Cadastrar Produto</h3>
+      </div>
+
+      <form id="productForm" onsubmit="KM_ADMIN.saveProduct(event)">
+        <input type="hidden" id="prodEditId">
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label class="form-label" for="prodName">Nome do Produto *</label>
+            <input type="text" id="prodName" class="form-control" required placeholder="Ex: Cadeira Artesanal Madeira & Metal">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="prodCategory">Categoria *</label>
+            <select id="prodCategory" class="form-control" required></select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="prodSku">Código SKU</label>
+            <input type="text" id="prodSku" class="form-control" placeholder="KM-2026-001">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="prodPrice">Preço de Venda (R$)</label>
+            <input type="number" id="prodPrice" class="form-control" step="0.01" min="0" placeholder="Deixe em branco para Preço sob consulta">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="prodStock">Estoque Disponível</label>
+            <input type="number" id="prodStock" class="form-control" min="0" value="5">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="prodStatus">Status da Publicação</label>
+            <select id="prodStatus" class="form-control">
+              <option value="published">Publicado (Visível na loja)</option>
+              <option value="draft">Rascunho (Oculto na loja)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="prodLeadTime">Prazo de Produção (Dias Úteis)</label>
+            <input type="number" id="prodLeadTime" class="form-control" min="0" value="0" placeholder="0 para pronta entrega">
+          </div>
+
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label class="form-label" for="prodImageSelect">Fotografia Real do Produto</label>
+            <select id="prodImageSelect" class="form-control" onchange="KM_ADMIN.handleImageSelect(this.value)">
+              <option value="public/products/banco-rustico-madeira-metal.png">Banco Rústico Madeira & Metal</option>
+              <option value="public/products/bolsa-marrom-ferragens-metalicas.png">Bolsa Marrom Ferragens Metálicas</option>
+              <option value="public/products/bolsa-tecido-animal-print.png">Bolsa Tecido Animal Print</option>
+              <option value="public/products/bone-preto-bordado-paving-tactile.png">Boné Preto Bordado "PAVING TACTILE"</option>
+              <option value="public/products/cadeira-artesanal-madeira-metal.png">Cadeira Artesanal Madeira & Metal</option>
+              <option value="public/products/cadeira-preta-barras-claras.png">Cadeira Preta Barras Claras</option>
+              <option value="public/products/cadeira-preta-grafismo-claro.png">Cadeira Preta Grafismo Claro</option>
+              <option value="public/products/camiseta-cinza-geometrica-amarela.png">Camiseta Cinza Geométrica Amarela</option>
+              <option value="public/products/camiseta-mostarda-geometrica-branca.png">Camiseta Mostarda Geométrica Branca</option>
+              <option value="public/products/camiseta-vermelha-geometrica.png">Camiseta Vermelha Geométrica</option>
+              <option value="public/products/camiseta-vinho-geometrica-branca.png">Camiseta Vinho Geométrica Branca</option>
+              <option value="public/products/escultura-madeira-metal.png">Escultura / Painel Madeira e Metal</option>
+              <option value="public/products/kit-presente-caneca-globo.png">Kit Presente Caneca & Globo Terrestre</option>
+            </select>
+            <input type="text" id="prodImageCustom" class="form-control" placeholder="Ou digite a URL da imagem personalizada" style="margin-top: 8px;">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="prodDimensions">Dimensões (Ex: 45 x 45 x 85 cm)</label>
+            <input type="text" id="prodDimensions" class="form-control" placeholder="C x L x A cm">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="prodWeight">Peso Estimado (kg)</label>
+            <input type="number" id="prodWeight" class="form-control" step="0.1" min="0" placeholder="Ex: 8.5">
+          </div>
+
+          <div class="form-group" style="grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; margin-top: 4px;">
+            <input type="checkbox" id="prodIsBulky" style="width: 18px; height: 18px; cursor: pointer;">
+            <label for="prodIsBulky" style="font-size: 0.85rem; font-weight: 600; cursor: pointer;">
+              Peça volumosa / Mobiliário (exige transporte especial e cotação dedicada)
+            </label>
+          </div>
+
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label class="form-label" for="prodMaterials">Materiais Utilizados</label>
+            <input type="text" id="prodMaterials" class="form-control" placeholder="Ex: Madeira maciça de demolição, ferro forjado com acabamento fosco">
+          </div>
+
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label class="form-label" for="prodShortDesc">Descrição Curta</label>
+            <input type="text" id="prodShortDesc" class="form-control" placeholder="Resumo de uma linha para visualização rápida">
+          </div>
+
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label class="form-label" for="prodDesc">Descrição Completa</label>
+            <textarea id="prodDesc" class="form-control" rows="4" placeholder="Detalhes conceituais, acabamento e inspiração da peça..."></textarea>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--color-areia-border); padding-top: 18px;">
+          <button type="button" class="btn btn-secondary" onclick="KM_ADMIN.closeModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="saveProductBtn">Salvar Peça</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Container de Toasts -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts -->
+  <script src="js/auth.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

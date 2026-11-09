@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Keina Mark Studio — Design Contemporâneo e Autoral</title>
+  <meta name="description" content="Loja autoral da Keina Mark Studio. Peças exclusivas de vestuário, acessórios de couro, mobiliário em madeira maciça e objetos com identidade amazônica contemporânea.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>K</text></svg>">
+</head>
+<body>
+
+  <!-- Barra Superior Institucional -->
+  <aside class="top-bar" aria-label="Informações institucionais">
+    <div class="container top-bar-content">
+      <span>Keina Mark Studio • Design autoral contemporâneo • Manaus, Brasil</span>
+    </div>
+  </aside>
+
+  <!-- Cabeçalho Principal (Sticky) -->
+  <header class="site-header" id="mainHeader">
+    <div class="container site-header-inner">
+      <!-- Logotipo Oficial -->
+      <a href="index.html" class="logo-wrap" aria-label="Keina Mark Studio - Página Inicial">
+        <span class="logo-brand" id="headerStoreName">KEINA MARK STUDIO</span>
+        <span class="logo-sub">DESIGN AUTORAL • MANAUS</span>
+      </a>
+
+      <!-- Menu de Categorias Editorial (Desktop) -->
+      <nav class="nav-desktop" aria-label="Navegação da Loja">
+        <a href="#catalogo" class="nav-link active" onclick="KM_APP.filterCategory('all'); KM_APP.setActiveNavLink(this);">Novidades</a>
+        <a href="#catalogo" class="nav-link" onclick="KM_APP.filterCategory('moda'); KM_APP.setActiveNavLink(this);">Moda</a>
+        <a href="#catalogo" class="nav-link" onclick="KM_APP.filterCategory('acessorios'); KM_APP.setActiveNavLink(this);">Acessórios</a>
+        <a href="#catalogo" class="nav-link" onclick="KM_APP.filterCategory('mobiliario'); KM_APP.setActiveNavLink(this);">Mobiliário</a>
+        <a href="#catalogo" class="nav-link" onclick="KM_APP.filterCategory('objetos-e-presentes'); KM_APP.setActiveNavLink(this);">Objetos</a>
+        <a href="#essencia" class="nav-link" onclick="KM_APP.setActiveNavLink(this);">Nossa Essência</a>
+        <a href="#catalogo" class="nav-link" onclick="KM_APP.filterCategory('all'); KM_APP.setActiveNavLink(this);" style="font-size: 0.72rem; opacity: 0.85;">Ver Catálogo</a>
+      </nav>
+
+      <!-- Ações do Cabeçalho -->
+      <div class="header-actions">
+        <!-- Botão de Busca -->
+        <button class="action-btn" id="searchBtn" title="Buscar produtos" aria-label="Buscar produtos">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </button>
+
+        <!-- Menu da Conta / Dropdown de Perfil -->
+        <div class="account-dropdown-wrap">
+          <button class="action-btn" id="accountBtn" title="Minha Conta" aria-label="Minha Conta" aria-haspopup="true" aria-expanded="false">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          </button>
+
+          <!-- Dropdown Renderizado Dinamicamente -->
+          <div class="account-dropdown" id="accountDropdown" role="menu" aria-label="Menu do Usuário">
+            <!-- Injetado dinamicamente via KM_APP.renderAccountDropdown() -->
+          </div>
+        </div>
+
+        <!-- Botão Carrinho -->
+        <button class="action-btn" id="cartBtn" title="Carrinho de Compras" aria-label="Carrinho de Compras">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+          <span class="cart-counter" id="cartCounter">0</span>
+        </button>
+
+        <!-- Toggle Mobile -->
+        <button class="action-btn menu-toggle" id="menuToggle" title="Menu" aria-label="Abrir Menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Gaveta Mobile de Navegação -->
+  <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
+  <nav class="mobile-nav-drawer" id="mobileNavDrawer" aria-label="Menu Mobile">
+    <div class="mobile-nav-header">
+      <div class="logo-wrap">
+        <span class="logo-brand" style="font-size: 1.35rem;">KEINA MARK</span>
+        <span class="logo-sub">STUDIO</span>
+      </div>
+      <button class="modal-close-btn" id="closeMobileNav" aria-label="Fechar menu">&times;</button>
+    </div>
+    <div class="mobile-nav-body">
+      <a href="#catalogo" class="mobile-nav-link" onclick="KM_APP.filterCategory('all'); KM_APP.closeMobileNav();">Novidades <span>&rarr;</span></a>
+      <a href="#catalogo" class="mobile-nav-link" onclick="KM_APP.filterCategory('moda'); KM_APP.closeMobileNav();">Moda <span>&rarr;</span></a>
+      <a href="#catalogo" class="mobile-nav-link" onclick="KM_APP.filterCategory('acessorios'); KM_APP.closeMobileNav();">Acessórios <span>&rarr;</span></a>
+      <a href="#catalogo" class="mobile-nav-link" onclick="KM_APP.filterCategory('mobiliario'); KM_APP.closeMobileNav();">Mobiliário <span>&rarr;</span></a>
+      <a href="#catalogo" class="mobile-nav-link" onclick="KM_APP.filterCategory('objetos-e-presentes'); KM_APP.closeMobileNav();">Objetos <span>&rarr;</span></a>
+      <a href="#essencia" class="mobile-nav-link" onclick="KM_APP.closeMobileNav()">Nossa Essência <span>&rarr;</span></a>
+      <a href="#catalogo" class="mobile-nav-link" onclick="KM_APP.filterCategory('all'); KM_APP.closeMobileNav();" style="opacity: 0.85;">Ver Catálogo Completo <span>&rarr;</span></a>
+
+      <!-- Seção da Conta no Mobile -->
+      <div id="mobileAccountSection" style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--color-areia-border);">
+        <!-- Injetado dinamicamente via JS -->
+      </div>
+    </div>
+  </nav>
+
+  <!-- Conteúdo Principal -->
+  <main id="inicio">
+
+    <!-- Seção Hero Editorial Full-Bleed 100% Sangrado -->
+    <section class="hero-section hero-fullbleed" id="heroSection">
+      <!-- Imagem de Fundo 100% Sangrada até as Bordas -->
+      <div class="hero-bg-container">
+        <img id="heroImage" src="public/Hero.png" alt="Keina Mark Studio — Coleção Inaugural" class="hero-bg-media">
+        <div class="hero-overlay"></div>
+      </div>
+
+      <!-- Conteúdo Editorial Sobreposto -->
+      <div class="container hero-container-overlay">
+        <div class="hero-content-fullbleed">
+          <div class="hero-tagline">Coleção Inaugural • Curadoria Exclusiva</div>
+          <h1 class="hero-title" id="heroTitle">Design com origem.
+Peças com identidade.</h1>
+          <p class="hero-description" id="heroSubtitle">
+            Uma curadoria de peças que une criatividade, expressão e design contemporâneo. Peças que valorizam matérias-primas nobres e a alma autoral brasileira.
+          </p>
+          <div class="hero-actions">
+            <a href="#catalogo" class="btn btn-hero-primary" onclick="KM_APP.filterCategory('all')">Explorar Coleção</a>
+            <a href="#catalogo" class="btn btn-hero-secondary" onclick="KM_APP.filterCategory('mobiliario')">Ver Mobiliário</a>
+          </div>
+
+          <!-- Metadados Editoriais no Rodapé do Hero -->
+          <div class="hero-meta-footer">
+            <div class="hero-meta-item">
+              <span class="hero-meta-label">Origem</span>
+              <span class="hero-meta-val">Manaus / Amazônia</span>
+            </div>
+            <div class="hero-meta-item">
+              <span class="hero-meta-label">Identidade</span>
+              <span class="hero-meta-val">100% Autoral</span>
+            </div>
+            <div class="hero-meta-item">
+              <span class="hero-meta-label">Acervo</span>
+              <span class="hero-meta-val">12 Peças Exclusivas</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Categorias Editoriais -->
+    <section class="section-padding" style="background-color: var(--color-marfim);">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Categorias da Casa</span>
+          <h2 class="section-title">Explore por Categorias</h2>
+        </div>
+        <div class="category-grid" id="categoryGrid">
+          <!-- Renderizado dinamicamente via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Catálogo de Produtos com Filtros -->
+    <section class="section-padding" id="catalogo" style="background-color: var(--color-marfim-light); border-top: 1px solid var(--color-areia-border);">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Catálogo Autoral</span>
+          <h2 class="section-title">Coleção Keina Mark Studio</h2>
+          <p style="color: var(--color-grafite-muted); max-width: 600px;">
+            Fotografias reais de peças exclusivas. Produtos sob encomenda e pronta entrega com apresentação transparente de materiais e dimensões.
+          </p>
+        </div>
+
+        <!-- Barra de Ferramentas de Filtragem -->
+        <div class="filter-toolbar">
+          <div class="filter-pills" id="categoryFilterPills">
+            <button class="filter-pill active" data-category="all" onclick="KM_APP.filterCategory('all')">Todos (<span id="countAll">0</span>)</button>
+            <button class="filter-pill" data-category="moda" onclick="KM_APP.filterCategory('moda')">Moda</button>
+            <button class="filter-pill" data-category="acessorios" onclick="KM_APP.filterCategory('acessorios')">Acessórios</button>
+            <button class="filter-pill" data-category="mobiliario" onclick="KM_APP.filterCategory('mobiliario')">Mobiliário</button>
+            <button class="filter-pill" data-category="objetos-e-presentes" onclick="KM_APP.filterCategory('objetos-e-presentes')">Objetos & Presentes</button>
+          </div>
+
+          <div class="sort-select-wrap">
+            <label for="sortSelect" class="sort-label">Ordenar:</label>
+            <select id="sortSelect" class="sort-select" onchange="KM_APP.handleSortChange(this.value)">
+              <option value="default">Relevância / Ordem Original</option>
+              <option value="price-asc">Menor Preço</option>
+              <option value="price-desc">Maior Preço</option>
+              <option value="name-asc">Nome (A - Z)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Grade de Produtos -->
+        <div class="products-grid" id="productsGrid">
+          <!-- Renderizado dinamicamente via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção Institucional: A Essência da Keina Mark Studio -->
+    <section class="essence-section" id="essencia">
+      <div class="container essence-grid">
+        <div>
+          <span class="essence-tag">Manifesto & Conceito</span>
+          <h2 class="essence-title" id="essenceTitle">A essência da Keina Mark Studio</h2>
+          <p class="essence-text" id="essenceText">
+            A Keina Mark Studio propõe um diálogo autoral entre o design contemporâneo e a alma brasileira. Em cada peça — do grafismo geométrico no vestuário ao encontro rústico entre madeira maciça e metal — há um compromisso genuíno com a originalidade, o calor dos materiais naturais e o tempo da boa criação. Não produzimos em massa: criamos objetos com personalidade para quem reconhece a força do design com raiz.
+          </p>
+          <div class="essence-values">
+            <div class="essence-value-item">
+              <h4>Madeira & Metal</h4>
+              <p>Estruturas pensadas para durar gerações, com acabamento refinado e respeito à matéria bruta.</p>
+            </div>
+            <div class="essence-value-item">
+              <h4>Grafismos Autorais</h4>
+              <p>Estamparia geométrica exclusiva impressa em tecidos confortáveis de alto padrão.</p>
+            </div>
+            <div class="essence-value-item">
+              <h4>Origem Consciente</h4>
+              <p>Criações pensadas a partir do contexto amazônico, com rigor estético universal.</p>
+            </div>
+            <div class="essence-value-item">
+              <h4>Atendimento Direto</h4>
+              <p>Canal consultivo para tirar dúvidas sobre dimensões, prazos de produção e frete dedicado.</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="essence-image-frame">
+            <img src="public/products/escultura-madeira-metal.png" alt="Objeto Escultórico em Madeira e Metal - Keina Mark Studio">
+            <div style="padding: 14px 4px 0; font-size: 0.8rem; color: var(--color-areia-light); display: flex; justify-content: space-between;">
+              <span>Recorte Geométrico em Madeira Maciça</span>
+              <span style="opacity: 0.7;">Acervo Studio 2026</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção Coleção em Destaque -->
+    <section class="collection-section">
+      <div class="container">
+        <div class="collection-banner">
+          <div>
+            <span class="section-tag">Curadoria Especial</span>
+            <h3 style="font-size: 2.2rem; margin-top: 6px;">Peças com Identidade</h3>
+            <p style="color: var(--color-grafite-muted); max-width: 580px; margin-top: 8px;">
+              Uma seleção refinada de mobiliário e acessórios estruturados que traduzem o ápice do minimalismo orgânico.
+            </p>
+          </div>
+          <div>
+            <button class="btn btn-couro" onclick="KM_APP.filterCategory('mobiliario')">Ver Seleção Mobiliário</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Rodapé Institucional -->
+  <footer class="site-footer" id="contato">
+    <div class="container">
+      <div class="footer-grid">
+        <!-- Coluna 1: Marca -->
+        <div>
+          <span class="logo-brand" style="font-size: 1.6rem; display: block; margin-bottom: 8px;">KEINA MARK STUDIO</span>
+          <p style="font-size: 0.85rem; color: var(--color-grafite-muted); line-height: 1.7; margin-bottom: 20px;">
+            Design contemporâneo, identidade amazônica e valorização de objetos autorais com personalidade. Peças exclusivas em moda, acessórios e mobiliário.
+          </p>
+          <div class="badge badge-areia" style="display: inline-block;">
+            Manaus / Amazonas — Envio Nacional
+          </div>
+        </div>
+
+        <!-- Coluna 2: Navegação -->
+        <div>
+          <h4 class="footer-col-title">Navegação</h4>
+          <ul class="footer-links">
+            <li><a href="#inicio">Início</a></li>
+            <li><a href="#catalogo" onclick="KM_APP.filterCategory('all')">Catálogo Completo</a></li>
+            <li><a href="#catalogo" onclick="KM_APP.filterCategory('moda')">Moda</a></li>
+            <li><a href="#catalogo" onclick="KM_APP.filterCategory('acessorios')">Acessórios</a></li>
+            <li><a href="#catalogo" onclick="KM_APP.filterCategory('mobiliario')">Mobiliário</a></li>
+            <li><a href="#catalogo" onclick="KM_APP.filterCategory('objetos-e-presentes')">Objetos & Presentes</a></li>
+          </ul>
+        </div>
+
+        <!-- Coluna 3: Atendimento -->
+        <div>
+          <h4 class="footer-col-title">Atendimento</h4>
+          <ul class="footer-links">
+            <li><span style="font-size: 0.85rem; color: var(--color-grafite-muted);">Segunda a Sexta: 09h às 18h</span></li>
+            <li><a href="mailto:contato@keinamark.com.br" id="footerEmail">contato@keinamark.com.br</a></li>
+            <li><a href="https://instagram.com" target="_blank" rel="noopener" id="footerInstagram">Instagram: @keinamarkstudio</a></li>
+            <li><a href="javascript:void(0)" onclick="KM_APP.toggleAccountDropdown()">Área do Cliente</a></li>
+          </ul>
+        </div>
+
+        <!-- Coluna 4: Informações e Políticas -->
+        <div>
+          <h4 class="footer-col-title">Políticas da Loja</h4>
+          <ul class="footer-links">
+            <li><a href="javascript:void(0)" onclick="KM_APP.showPolicy('frete')">Envio e Frete Especial</a></li>
+            <li><a href="javascript:void(0)" onclick="KM_APP.showPolicy('mobiliario')">Mobiliário e Peças Volumosas</a></li>
+            <li><a href="javascript:void(0)" onclick="KM_APP.showPolicy('trocas')">Trocas e Devoluções</a></li>
+            <li><a href="javascript:void(0)" onclick="KM_APP.showPolicy('privacidade')">Privacidade e LGPD</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Barra Inferior -->
+      <div class="footer-bottom">
+        <div>
+          &copy; 2026 Keina Mark Studio. Todos os direitos reservados. CNPJ e endereço sob consulta contratual.
+        </div>
+        <div style="font-size: 0.74rem; color: var(--color-couro);">
+          Fase Visual Demonstrativa • Pagamento Online em Breve
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       MODAIS E GAVETAS DO SISTEMA
+       ======================================================================== -->
+
+  <!-- Gaveta do Carrinho de Compras -->
+  <div class="cart-drawer-backdrop" id="cartDrawerBackdrop"></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Carrinho de Compras">
+    <div class="cart-drawer-header">
+      <div style="display: flex; align-items: baseline; gap: 10px;">
+        <h3 class="cart-drawer-title">Seu Carrinho</h3>
+        <span id="cartDrawerItemCount" style="font-size: 0.85rem; color: var(--color-grafite-muted);">(0 itens)</span>
+      </div>
+      <button class="modal-close-btn" id="closeCartBtn" aria-label="Fechar carrinho">&times;</button>
+    </div>
+
+    <!-- Lista de Itens do Carrinho -->
+    <div class="cart-drawer-body" id="cartItemsContainer">
+      <!-- Inserido dinamicamente -->
+    </div>
+
+    <!-- Rodapé do Carrinho com Cálculos e Frete -->
+    <div class="cart-drawer-footer" id="cartFooter">
+      <!-- Calculadora de Frete no Carrinho -->
+      <div class="freight-box">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;">Calcular Frete (CEP)</span>
+          <span style="font-size: 0.7rem; color: var(--color-grafite-muted);">Origem: Manaus/AM</span>
+        </div>
+        <div class="freight-input-row">
+          <input type="text" id="cartCepInput" class="freight-input" placeholder="00000-000" maxlength="9">
+          <button class="btn btn-secondary btn-sm" onclick="KM_APP.calculateCartFreight()">Calcular</button>
+        </div>
+        <div id="cartFreightResult" style="display: none;"></div>
+      </div>
+
+      <!-- Subtotal e Total -->
+      <div style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--color-areia-border); padding-top: 12px;">
+        <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+          <span style="color: var(--color-grafite-muted);">Subtotal das peças:</span>
+          <strong id="cartSubtotal">R$ 0,00</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 1.15rem; font-weight: 700;">
+          <span>Total Estimado:</span>
+          <span id="cartTotal" style="color: var(--color-couro);">R$ 0,00</span>
+        </div>
+      </div>
+
+      <!-- Aviso Obrigatório de Pagamento Online Desabilitado -->
+      <div class="notice-banner">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        <div>
+          <strong>Pagamento Online em Breve</strong><br>
+          Esta versão é demonstrativa. Para adquirir as peças selecionadas, solicite atendimento direto com nossa equipe via WhatsApp.
+        </div>
+      </div>
+
+      <!-- Ações de Saída -->
+      <button class="btn btn-primary" id="checkoutBtn" disabled style="opacity: 0.6; cursor: not-allowed; width: 100%;">
+        Finalizar Pedido Online (Em Breve)
+      </button>
+      <button class="btn btn-couro" id="whatsappOrderBtn" onclick="KM_APP.orderViaWhatsApp()" style="width: 100%;">
+        Solicitar Cotação no WhatsApp
+      </button>
+    </div>
+  </aside>
+
+  <!-- Modal de Detalhes do Produto (Quick View) -->
+  <div class="modal-backdrop" id="quickViewBackdrop">
+    <div class="modal-dialog">
+      <button class="modal-close-btn" id="closeQuickViewBtn" aria-label="Fechar">&times;</button>
+      <div class="quickview-layout" id="quickViewContent">
+        <!-- Inserido dinamicamente via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Busca Global -->
+  <div class="modal-backdrop" id="searchBackdrop">
+    <div class="modal-dialog" style="max-width: 620px; padding: 28px;">
+      <button class="modal-close-btn" id="closeSearchBtn" aria-label="Fechar">&times;</button>
+      <div style="margin-bottom: 20px;">
+        <span class="section-tag">Busca Rápida</span>
+        <h3 style="font-size: 1.8rem; margin-top: 4px;">Buscar no Catálogo</h3>
+      </div>
+      <div style="position: relative; margin-bottom: 24px;">
+        <input type="text" id="searchInput" class="form-control" placeholder="Digite o nome da peça, categoria, cor ou SKU..." style="padding: 14px 18px; font-size: 1rem;" autofocus>
+      </div>
+      <div id="searchResults" style="display: flex; flex-direction: column; gap: 12px; max-height: 380px; overflow-y: auto;">
+        <p style="color: var(--color-grafite-muted); font-size: 0.85rem;">Digite pelo menos 2 caracteres para pesquisar...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Autenticação (Login & Cadastro) -->
+  <div class="modal-backdrop" id="authModalBackdrop">
+    <div class="modal-dialog" style="max-width: 480px; padding: 32px;">
+      <button class="modal-close-btn" onclick="KM_APP.closeModals()" aria-label="Fechar">&times;</button>
+      
+      <!-- Seletor de Abas (Entrar / Criar Conta) -->
+      <div style="display: flex; border-bottom: 1px solid var(--color-areia-border); margin-bottom: 24px;">
+        <button class="auth-tab-btn active" id="tabBtnLogin" onclick="KM_APP.switchAuthTab('login')" style="flex: 1; padding: 12px; font-weight: 600; font-size: 0.88rem; text-transform: uppercase; letter-spacing: 0.08em; background: none; border: none; border-bottom: 2px solid var(--color-couro); color: var(--color-grafite); cursor: pointer;">
+          Entrar
+        </button>
+        <button class="auth-tab-btn" id="tabBtnRegister" onclick="KM_APP.switchAuthTab('register')" style="flex: 1; padding: 12px; font-weight: 500; font-size: 0.88rem; text-transform: uppercase; letter-spacing: 0.08em; background: none; border: none; border-bottom: 2px solid transparent; color: var(--color-grafite-muted); cursor: pointer;">
+          Criar Conta
+        </button>
+      </div>
+
+      <!-- Formulário de Login -->
+      <form id="loginForm" onsubmit="KM_APP.handleLoginForm(event)">
+        <div style="margin-bottom: 16px;">
+          <label class="form-label" for="loginEmail">E-mail</label>
+          <input type="email" id="loginEmail" class="form-control" required placeholder="seu@email.com" autocomplete="email">
+        </div>
+        <div style="margin-bottom: 20px;">
+          <label class="form-label" for="loginPassword">Senha</label>
+          <input type="password" id="loginPassword" class="form-control" required placeholder="Sua senha" autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px;">Entrar na Conta</button>
+
+        <!-- Atalhos para Demonstração e Avaliação Rápida -->
+        <div style="margin-top: 24px; padding-top: 18px; border-top: 1px dashed var(--color-areia-border); text-align: center;">
+          <span style="display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-grafite-muted); margin-bottom: 10px;">
+            Acesso Rápido para Avaliação
+          </span>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="KM_APP.quickDemoLogin('customer')" style="flex: 1; font-size: 0.72rem;">
+              👤 Como Cliente
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="KM_APP.quickDemoLogin('admin')" style="flex: 1; font-size: 0.72rem; border-color: var(--color-couro); color: var(--color-couro);">
+              ⚡ Como Admin
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Formulário de Cadastro (SEGURANÇA: papel é sempre 'customer') -->
+      <form id="registerForm" onsubmit="KM_APP.handleRegisterForm(event)" style="display: none;">
+        <div style="margin-bottom: 14px;">
+          <label class="form-label" for="regName">Nome Completo *</label>
+          <input type="text" id="regName" class="form-control" required placeholder="Seu nome">
+        </div>
+        <div style="margin-bottom: 14px;">
+          <label class="form-label" for="regEmail">E-mail *</label>
+          <input type="email" id="regEmail" class="form-control" required placeholder="seu@email.com">
+        </div>
+        <div style="margin-bottom: 14px;">
+          <label class="form-label" for="regPassword">Senha *</label>
+          <input type="password" id="regPassword" class="form-control" required placeholder="Crie uma senha segura" minlength="6">
+        </div>
+        <div style="margin-bottom: 20px;">
+          <label class="form-label" for="regCep">CEP (Opcional, para frete)</label>
+          <input type="text" id="regCep" class="form-control" placeholder="00000-000" maxlength="9">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px;">Concluir Cadastro</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Detalhes da Conta (Minha Conta) -->
+  <div class="modal-backdrop" id="accountDetailsModalBackdrop">
+    <div class="modal-dialog" style="max-width: 520px; padding: 32px;">
+      <button class="modal-close-btn" onclick="KM_APP.closeModals()" aria-label="Fechar">&times;</button>
+      <div style="margin-bottom: 20px;">
+        <span class="section-tag">Perfil do Usuário</span>
+        <h3 style="font-size: 1.8rem; margin-top: 4px;">Minha Conta</h3>
+      </div>
+      <div id="accountDetailsContent" style="display: flex; flex-direction: column; gap: 16px;">
+        <!-- Preenchido dinamicamente via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Endereços -->
+  <div class="modal-backdrop" id="addressesModalBackdrop">
+    <div class="modal-dialog" style="max-width: 540px; padding: 32px;">
+      <button class="modal-close-btn" onclick="KM_APP.closeModals()" aria-label="Fechar">&times;</button>
+      <div style="margin-bottom: 20px;">
+        <span class="section-tag">Entrega & Logística</span>
+        <h3 style="font-size: 1.8rem; margin-top: 4px;">Meus Endereços</h3>
+      </div>
+      <div id="addressesModalContent" style="display: flex; flex-direction: column; gap: 14px;">
+        <!-- Preenchido via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Container de Toasts de Notificação -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts Oficiais -->
+  <script src="js/auth.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
