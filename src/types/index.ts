@@ -57,9 +57,10 @@ export interface Category {
   id: string;
   name: string;
   slug: string;
-  description?: string;
-  image_url?: string;
+  description?: string | null;
+  image_url?: string | null;
   display_order: number;
+  order?: number;
   is_active: boolean;
 }
 
@@ -67,12 +68,15 @@ export interface Collection {
   id: string;
   name: string;
   slug: string;
-  title: string;
-  subtitle?: string;
-  description?: string;
-  banner_url?: string;
+  title?: string;
+  subtitle?: string | null;
+  description?: string | null;
+  banner_url?: string | null;
   display_order: number;
+  order?: number;
   is_active: boolean;
+  is_featured?: boolean;
+  product_ids?: string[];
   products?: Product[];
 }
 

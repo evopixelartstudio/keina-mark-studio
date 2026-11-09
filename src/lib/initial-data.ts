@@ -50,6 +50,7 @@ export const INITIAL_COLLECTIONS: Collection[] = [
     banner_url: '/products/bolsa-marrom-ferragens-metalicas.png',
     display_order: 1,
     is_active: true,
+    is_featured: true,
   },
 ];
 

@@ -1,0 +1,30 @@
+import {
+  INITIAL_CATEGORIES,
+  INITIAL_COLLECTIONS,
+  INITIAL_PRODUCTS,
+  INITIAL_STORE_SETTINGS,
+  INITIAL_APPEARANCE_SETTINGS,
+  INITIAL_SHIPPING_SETTINGS,
+  INITIAL_ADDRESSES,
+  INITIAL_CUSTOMERS,
+} from "./initial-data";
+
+export const initialCategories = INITIAL_CATEGORIES;
+export const initialCollections = INITIAL_COLLECTIONS;
+export const initialProducts = INITIAL_PRODUCTS;
+export const initialStoreSettings = INITIAL_STORE_SETTINGS;
+export const initialAppearanceSettings = INITIAL_APPEARANCE_SETTINGS;
+export const initialShippingSettings = INITIAL_SHIPPING_SETTINGS;
+export const initialAddresses = INITIAL_ADDRESSES;
+export const initialCustomers = INITIAL_CUSTOMERS;
+
+export {
+  INITIAL_CATEGORIES,
+  INITIAL_COLLECTIONS,
+  INITIAL_PRODUCTS,
+  INITIAL_STORE_SETTINGS,
+  INITIAL_APPEARANCE_SETTINGS,
+  INITIAL_SHIPPING_SETTINGS,
+  INITIAL_ADDRESSES,
+  INITIAL_CUSTOMERS,
+};

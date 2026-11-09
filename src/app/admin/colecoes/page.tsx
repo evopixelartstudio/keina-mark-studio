@@ -28,7 +28,7 @@ export default function AdminCollectionsPage() {
     setSubtitle(col.subtitle || "");
     setDescription(col.description || "");
     setBannerUrl(col.banner_url || "");
-    setIsFeatured(col.is_featured);
+    setIsFeatured(col.is_featured ?? true);
     setSelectedProductIds(col.product_ids || []);
     setIsFormOpen(true);
   };
@@ -64,6 +64,7 @@ export default function AdminCollectionsPage() {
         banner_url: bannerUrl || null,
         is_featured: isFeatured,
         is_active: true,
+        display_order: collections.length + 1,
         product_ids: selectedProductIds,
       };
       setCollections([...collections, newCol]);

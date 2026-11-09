@@ -24,8 +24,8 @@ export default function AdminCategoriesPage() {
     setName(cat.name);
     setSlug(cat.slug);
     setDescription(cat.description || "");
-    setImageUrl(cat.image_url);
-    setOrder(cat.order);
+    setImageUrl(cat.image_url || "");
+    setOrder(cat.order || cat.display_order || 1);
     setIsCreating(true);
   };
 
@@ -44,6 +44,7 @@ export default function AdminCategoriesPage() {
                 description: description || null,
                 image_url: imageUrl || "/products/bolsa-marrom-ferragens.png",
                 order: Number(order),
+                display_order: Number(order),
               }
             : c
         )
@@ -56,6 +57,7 @@ export default function AdminCategoriesPage() {
         description: description || null,
         image_url: imageUrl || "/products/bolsa-marrom-ferragens.png",
         order: Number(order),
+        display_order: Number(order),
         is_active: true,
       };
       setCategories([...categories, newCat]);
@@ -210,7 +212,7 @@ export default function AdminCategoriesPage() {
               <div>
                 <div className="relative aspect-4/3 w-full bg-marfim-200 overflow-hidden mb-3">
                   <Image
-                    src={cat.image_url}
+                    src={cat.image_url || "/products/bolsa-marrom-ferragens-metalicas.png"}
                     alt={cat.name}
                     fill
                     className="object-cover"
@@ -221,7 +223,7 @@ export default function AdminCategoriesPage() {
                     {cat.name}
                   </h3>
                   <span className="text-[10px] font-mono text-grafite/40">
-                    Posição #{cat.order}
+                    Posição #{cat.order || cat.display_order || 1}
                   </span>
                 </div>
                 <p className="text-xs text-grafite/60 font-sans mt-1 line-clamp-2">
